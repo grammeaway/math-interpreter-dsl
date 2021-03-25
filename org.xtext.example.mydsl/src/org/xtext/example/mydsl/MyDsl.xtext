@@ -1,0 +1,28 @@
+grammar org.xtext.example.mydsl.MyDsl with org.eclipse.xtext.common.Terminals
+
+generate myDsl "http://www.xtext.org/example/mydsl/MyDsl"
+
+MathExp:
+	'result' 'is' exp=Exp
+;
+
+Exp returns Expression: 
+	Factor(('+' {Plus.left=current} | '-' {Minus.left = current}) right=Factor)*
+;
+
+Factor returns Expression:
+	Primary (('*' {Mult.left=current} | '/' {Div.left=current}) right=Primary)*
+;
+
+
+Primary returns Expression:
+	Number | Parenthesis
+;
+
+Parenthesis returns Expression:
+	'(' Exp ')'
+;
+
+Number returns Expression:
+	{Num} value=INT
+;
